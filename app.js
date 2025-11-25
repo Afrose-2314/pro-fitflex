@@ -24,6 +24,40 @@ const db = {
 };
 
 const state = db.load();
+/* LOGIN PAGE */
+#loginPage {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+#loginBox {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  width: 320px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+}
+
+#loginBox input,
+#loginBox button {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+#loginBox button {
+  background: #ff007f;
+  color: #fff;
+  cursor: pointer;
+}
+
 
 /* ---------- Workouts Library ---------- */
 const WORKOUTS = [
