@@ -1,6 +1,7 @@
 /* --------------------------------------------------
    FitFlex — Main App Script
-   Data stored in localStorage["fitflex"]
+   Cleaned & Production-Ready Version
+   Uses localStorage["fitflex"]
 -------------------------------------------------- */
 
 /* ---------- Shortcuts ---------- */
@@ -24,18 +25,22 @@ const db = {
       week: genEmptyWeek()
     };
   },
-  save() { localStorage.setItem('fitflex', JSON.stringify(state)); }
+  save() {
+    localStorage.setItem('fitflex', JSON.stringify(state));
+  }
 };
 
 const state = db.load();
 
-/* ---------- Login Page Styles (inline but allowed) ---------- */
+/* ---------- Login Page Styles ---------- */
 const loginStyles = `
-#loginPage { height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
+#loginPage {
+  height:100vh; display:flex; flex-direction:column;
+  justify-content:center; align-items:center; text-align:center;
+}
 #loginBox {
   background:rgba(255,255,255,0.1);
-  padding:30px; width:320px;
-  border-radius:15px;
+  padding:30px; width:320px; border-radius:15px;
   backdrop-filter:blur(10px);
 }
 #loginBox input, #loginBox button {
@@ -48,54 +53,14 @@ document.head.insertAdjacentHTML("beforeend", `<style>${loginStyles}</style>`);
 
 /* ---------- Workout Library ---------- */
 const WORKOUTS = [
-  {
-    id:'pushups', name:'Push-ups', type:'strength', level:'Beginner',
-    seconds:30, calories:8,
-    gif:'https://i.imgur.com/8Vq2m0T.gif',
-    desc:'Keep your body straight, hands under shoulders. Lower until elbows are ~90°, then push back.'
-  },
-  {
-    id:'squats', name:'Bodyweight Squats', type:'strength', level:'Beginner',
-    seconds:30, calories:10,
-    gif:'https://i.imgur.com/2C0z8u8.gif',
-    desc:'Feet shoulder-width apart, sit back and down, keep chest up and knees tracking toes.'
-  },
-  {
-    id:'mountain', name:'Mountain Climbers', type:'cardio', level:'Intermediate',
-    seconds:30, calories:12,
-    gif:'https://i.imgur.com/ZzA7sQH.gif',
-    desc:'From plank, drive knees toward chest quickly while keeping hips level.'
-  },
-  {
-    id:'plank', name:'Plank Hold', type:'core', level:'All',
-    seconds:30, calories:6,
-    gif:'https://i.imgur.com/v2ZQk7C.gif',
-    desc:'Body straight line. Brace core. Do not let hips sag.'
-  },
-  {
-    id:'jumpingjacks', name:'Jumping Jacks', type:'cardio', level:'All',
-    seconds:30, calories:12,
-    gif:'https://i.imgur.com/sqM8t8t.gif',
-    desc:'Land softly and maintain rhythm.'
-  },
-  {
-    id:'lunges', name:'Alternating Lunges', type:'strength', level:'Intermediate',
-    seconds:30, calories:9,
-    gif:'https://i.imgur.com/t1bM9tO.gif',
-    desc:'Step forward, lower both knees to ~90°, push back from heel.'
-  },
-  {
-    id:'highknees', name:'High Knees', type:'cardio', level:'All',
-    seconds:30, calories:14,
-    gif:'https://i.imgur.com/2mDqz6R.gif',
-    desc:'Run in place with knees above hip height.'
-  },
-  {
-    id:'bicycle', name:'Bicycle Crunch', type:'core', level:'Intermediate',
-    seconds:30, calories:8,
-    gif:'https://i.imgur.com/9n0Wl2U.gif',
-    desc:'Elbow to opposite knee. Don’t yank neck.'
-  }
+  { id:'pushups', name:'Push-ups', type:'strength', level:'Beginner', seconds:30, calories:8, gif:'https://i.imgur.com/8Vq2m0T.gif', desc:'Keep your body straight...' },
+  { id:'squats', name:'Bodyweight Squats', type:'strength', level:'Beginner', seconds:30, calories:10, gif:'https://i.imgur.com/2C0z8u8.gif', desc:'Feet shoulder-width apart...' },
+  { id:'mountain', name:'Mountain Climbers', type:'cardio', level:'Intermediate', seconds:30, calories:12, gif:'https://i.imgur.com/ZzA7sQH.gif', desc:'From plank drive knees...' },
+  { id:'plank', name:'Plank Hold', type:'core', level:'All', seconds:30, calories:6, gif:'https://i.imgur.com/v2ZQk7C.gif', desc:'Body straight line...' },
+  { id:'jumpingjacks', name:'Jumping Jacks', type:'cardio', level:'All', seconds:30, calories:12, gif:'https://i.imgur.com/sqM8t8t.gif', desc:'Land softly...' },
+  { id:'lunges', name:'Alternating Lunges', type:'strength', level:'Intermediate', seconds:30, calories:9, gif:'https://i.imgur.com/t1bM9tO.gif', desc:'Step forward and lower...' },
+  { id:'highknees', name:'High Knees', type:'cardio', level:'All', seconds:30, calories:14, gif:'https://i.imgur.com/2mDqz6R.gif', desc:'Run in place...' },
+  { id:'bicycle', name:'Bicycle Crunch', type:'core', level:'Intermediate', seconds:30, calories:8, gif:'https://i.imgur.com/9n0Wl2U.gif', desc:'Elbow to opposite knee...' }
 ];
 
 /* ---------- Week Structure ---------- */
@@ -107,7 +72,7 @@ function genEmptyWeek() {
   return [...Array(7)].map((_, i) => {
     const d = new Date(start);
     d.setDate(start.getDate() + i);
-    return { date: d.toISOString().slice(0,10), calories: 0, workouts: 0 };
+    return { date: d.toISOString().slice(0,10), calories:0, workouts:0 };
   });
 }
 
@@ -134,17 +99,17 @@ function applyTheme() {
 applyTheme();
 
 el('#themeToggle')?.addEventListener('click', () => {
-  state.theme = (state.theme === 'dark') ? 'light' : 'dark';
+  state.theme = state.theme === 'dark' ? 'light' : 'dark';
   db.save();
   applyTheme();
 });
 
 /* ---------- Daily Plan ---------- */
-function shufflePlan(){
+function shufflePlan() {
   state.todayPlan = [...WORKOUTS]
     .sort(() => Math.random() - 0.5)
     .slice(0, 3)
-    .map(w => ({ id: w.id, done: false }));
+    .map(w => ({ id: w.id, done:false }));
 
   db.save();
   renderPlan();
@@ -164,10 +129,14 @@ function renderPlan() {
     const li = document.createElement('li');
 
     li.innerHTML = `
-      <div><strong>${w.name}</strong> <span class="tag">${w.type}</span> <span class="tag">${w.seconds}s</span></div>
+      <div><strong>${w.name}</strong>
+        <span class="tag">${w.type}</span>
+        <span class="tag">${w.seconds}s</span></div>
       <div>
         <button class="btn tiny start-btn" data-id="${w.id}">Start</button>
-        <span class="tag ${item.done ? '' : 'pending'}">${item.done ? 'Done ✔' : 'Pending'}</span>
+        <span class="tag ${item.done ? '' : 'pending'}">
+          ${item.done ? 'Done ✔' : 'Pending'}
+        </span>
       </div>
     `;
     ul.appendChild(li);
@@ -179,17 +148,15 @@ function renderPlan() {
 }
 
 el('#shufflePlan')?.addEventListener('click', () => { shufflePlan(); rotateQuote(); });
-
 el('#completePlan')?.addEventListener('click', () => {
-  state.todayPlan = state.todayPlan.map(w => ({ ...w, done: true }));
+  state.todayPlan = state.todayPlan.map(w => ({ ...w, done:true }));
   db.save();
   renderPlan();
 });
-
 renderPlan();
 
-/* ---------- Dashboard Stats ---------- */
-function updateStats(){
+/* ---------- Stats ---------- */
+function updateStats() {
   el('#statWorkouts').textContent = state.workoutsToday;
   el('#statCalories').textContent = state.caloriesToday;
   el('#statPoints').textContent = state.points;
@@ -207,13 +174,13 @@ updateStats();
 
 /* ---------- Badges ---------- */
 const BADGES = [
-  {id:'first',      name:'First Steps',   need:1,   icon:'🥇'},
-  {id:'streak5',    name:'5 Workouts',    need:5,   icon:'🎖️'},
-  {id:'burn100',    name:'100 Calories',  need:100, icon:'🔥', mode:'cal'},
-  {id:'points200',  name:'200 Points',    need:200, icon:'🏆', mode:'pts'},
+  {id:'first', name:'First Steps', need:1, icon:'🥇'},
+  {id:'streak5', name:'5 Workouts', need:5, icon:'🎖️'},
+  {id:'burn100', name:'100 Calories', need:100, icon:'🔥', mode:'cal'},
+  {id:'points200', name:'200 Points', need:200, icon:'🏆', mode:'pts'}
 ];
 
-function renderBadges(){
+function renderBadges() {
   const wrap = el('#badges');
   wrap.innerHTML = '';
 
@@ -239,7 +206,8 @@ const QUOTES = [
   "Consistency is a superpower.",
   "You don’t have to be extreme, just consistent."
 ];
-function rotateQuote(){
+
+function rotateQuote() {
   el('#quote').textContent = "“" + QUOTES[Math.floor(Math.random()*QUOTES.length)] + "”";
 }
 rotateQuote();
@@ -253,6 +221,7 @@ function renderWorkouts(list = WORKOUTS) {
   list.forEach(w => {
     const card = document.createElement('div');
     card.className = 'w-card';
+
     card.innerHTML = `
       <div class="thumb"><img src="${w.gif}"></div>
       <div class="content">
@@ -283,18 +252,19 @@ function renderWorkouts(list = WORKOUTS) {
 }
 renderWorkouts();
 
+
 /* ---------- Search ---------- */
 el('#searchInput')?.addEventListener('input', e => {
   const q = e.target.value.toLowerCase().trim();
   renderWorkouts(
-    WORKOUTS.filter(w =>
-      (w.name + w.type + w.level).toLowerCase().includes(q))
+    WORKOUTS.filter(w => (w.name + w.type + w.level).toLowerCase().includes(q))
   );
 });
 
 /* ---------- Workout Modal & Timer ---------- */
 let timer = null;
-let remaining = 30, total = 30;
+let remaining = 30;
+let total = 30;
 let activeWorkout = null;
 
 function fmt(sec) {
@@ -303,7 +273,7 @@ function fmt(sec) {
   return `${m}:${s}`;
 }
 
-function openWorkout(id, pauseOnly=false){
+function openWorkout(id, pauseOnly=false) {
   const w = WORKOUTS.find(x => x.id === id);
   if (!w) return;
 
@@ -317,19 +287,19 @@ function openWorkout(id, pauseOnly=false){
   el('#timeBar').style.width = '0%';
 
   el('#workoutModal').classList.remove('hidden');
-  if(!pauseOnly) start();
+  if (!pauseOnly) start();
 }
 
-function closeModal(){
+function closeModal() {
   stop();
   el('#workoutModal').classList.add('hidden');
 }
 el('#closeModal')?.addEventListener('click', closeModal);
 
-function tick(){
+function tick() {
   remaining--;
 
-  if(remaining < 0){
+  if (remaining < 0) {
     finish();
     return;
   }
@@ -338,20 +308,17 @@ function tick(){
   el('#timeBar').style.width = `${100 * (1 - remaining / total)}%`;
 }
 
-function start(){
-  stop();
-  timer = setInterval(tick, 1000);
-}
-function pause(){ stop(); }
-function stop(){ if(timer){ clearInterval(timer); timer=null; } }
+function start() { stop(); timer = setInterval(tick, 1000); }
+function pause() { stop(); }
+function stop() { if (timer) { clearInterval(timer); timer=null; } }
 
 el('#startTimer')?.addEventListener('click', start);
 el('#pauseTimer')?.addEventListener('click', pause);
 el('#completeWorkout')?.addEventListener('click', finish);
 
-function finish(){
+function finish() {
   stop();
-  if(!activeWorkout) return;
+  if (!activeWorkout) return;
 
   state.points += 10;
   state.workoutsToday++;
@@ -385,11 +352,11 @@ function finish(){
 }
 
 /* ---------- Rolling Week Update ---------- */
-function ensureWeekToday(){
+function ensureWeekToday() {
   const today = new Date().toISOString().slice(0,10);
   let idx = state.week.findIndex(d => d.date === today);
 
-  if(idx === -1){
+  if (idx === -1) {
     state.week.shift();
     state.week.push({ date: today, calories:0, workouts:0 });
     idx = 6;
@@ -400,12 +367,12 @@ function ensureWeekToday(){
 /* ---------- Progress Page ---------- */
 let chart = null;
 
-function drawWeekChart(){
+function drawWeekChart() {
   const ctx = el('#weekChart').getContext('2d');
   const labels = state.week.map(w => w.date.slice(5));
   const cals = state.week.map(w => w.calories);
 
-  if(chart) chart.destroy();
+  if (chart) chart.destroy();
 
   chart = new Chart(ctx, {
     type: 'bar',
@@ -421,11 +388,11 @@ function drawWeekChart(){
   });
 }
 
-function refreshHistory(){
+function refreshHistory() {
   const ul = el('#historyList');
   ul.innerHTML = '';
 
-  if(!state.history.length){
+  if (!state.history.length) {
     ul.innerHTML = `<li><span>No workouts yet.</span><span>Start one from the Library!</span></li>`;
     return;
   }
@@ -439,17 +406,17 @@ function refreshHistory(){
 
 /* ---------- BMI Calculation ---------- */
 function bmiAdvice(bmi){
-  if(bmi < 18.5) return 'Underweight — add strength training & more calories.';
-  if(bmi < 24.9) return 'Normal — maintain with balanced routine.';
-  if(bmi < 29.9) return 'Overweight — focus on cardio + light strength.';
+  if (bmi < 18.5) return 'Underweight — add strength training & more calories.';
+  if (bmi < 24.9) return 'Normal — maintain with balanced routine.';
+  if (bmi < 29.9) return 'Overweight — focus on cardio + light strength.';
   return 'Obesity — slow fat loss; consider professional guidance.';
 }
 
-el('#calcBMI')?.addEventListener('click', ()=>{
+el('#calcBMI')?.addEventListener('click', () => {
   const h = Number(el('#height').value);
   const w = Number(el('#weight').value);
 
-  if(!h || !w){
+  if (!h || !w) {
     el('#bmiResult').textContent = "Please enter height & weight.";
     return;
   }
@@ -462,23 +429,22 @@ el('#calcBMI')?.addEventListener('click', ()=>{
 });
 
 /* ---------- Planner ---------- */
-el('#saveGoal')?.addEventListener('click', ()=>{
+el('#saveGoal')?.addEventListener('click', () => {
   state.goalType = el('#goal').value;
   state.goalMinutes = Number(el('#dailyMinutes').value || 30);
-
   db.save();
   el('#planSuggest').innerHTML = planSuggestText();
   updateStats();
 });
 
-function planSuggestText(){
+function planSuggestText() {
   const t = state.goalType;
   const m = state.goalMinutes;
 
-  if(t === 'fat-loss')
+  if (t === 'fat-loss')
     return `<strong>Plan:</strong> <b>${m} mins/day</b>. 3× cardio, 2× strength, 2× active rest.`;
 
-  if(t === 'muscle-gain')
+  if (t === 'muscle-gain')
     return `<strong>Plan:</strong> <b>${m} mins/day</b>. 3–4× strength, 1–2× cardio, 2× mobility.`;
 
   return `<strong>Plan:</strong> <b>${m} mins/day</b>. Mixed circuits + mobility + light cardio.`;
@@ -487,31 +453,30 @@ function planSuggestText(){
 el('#planSuggest').innerHTML = planSuggestText();
 
 /* ---------- Settings ---------- */
-el('#exportData')?.addEventListener('click', ()=>{
+el('#exportData')?.addEventListener('click', () => {
   const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-
   a.href = url;
   a.download = 'fitflex-progress.json';
   a.click();
   URL.revokeObjectURL(url);
 });
 
-el('#resetData')?.addEventListener('click', ()=>{
-  if(confirm("Reset all saved progress?")){
+el('#resetData')?.addEventListener('click', () => {
+  if (confirm("Reset all saved progress?")) {
     localStorage.removeItem('fitflex');
     location.reload();
   }
 });
 
 /* ---------- Daily Reset ---------- */
-(function dailyReset(){
+(function dailyReset() {
   const key = 'fitflex-date';
   const today = new Date().toISOString().slice(0,10);
   const saved = localStorage.getItem(key);
 
-  if(saved !== today){
+  if (saved !== today) {
     state.workoutsToday = 0;
     state.caloriesToday = 0;
     localStorage.setItem(key, today);
@@ -519,6 +484,6 @@ el('#resetData')?.addEventListener('click', ()=>{
   }
 })();
 
-/* ---------- Info Button ---------- */
+/* ---------- Global Info Handler ---------- */
 function openInfo(id){ openWorkout(id, true); }
 window.openInfo = openInfo;
