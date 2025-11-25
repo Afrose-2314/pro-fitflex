@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FitFlex — Your Personal Fitness Companion</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Chart.js for animated charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo">💪</div>
+      <div class="title">
+        <h1>FitFlex</h1>
+        <p>Your Personal Fitness Companion</p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button id="themeToggle" class="btn ghost" title="Dark/Light mode">🌗</button>
+      <button id="resetData" class="btn ghost" title="Reset saved data">↺</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-target="#dashboard">Dashboard</button>
+    <button class="tab" data-target="#workouts">Workouts</button>
+    <button class="tab" data-target="#progress">Progress</button>
+    <button class="tab" data-target="#planner">BMI & Planner</button>
+    <button class="tab" data-target="#settings">Settings</button>
+  </nav>
+
+  <main class="container">
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="page active">
+      <div class="grid two">
+        <div class="card ring-card">
+          <h2>Today’s Progress</h2>
+          <div class="ring-wrap">
+            <svg class="ring" width="200" height="200" viewBox="0 0 120 120">
+              <circle class="bg" cx="60" cy="60" r="52"></circle>
+              <circle class="fg" id="progressRing" cx="60" cy="60" r="52"
+                      stroke-dasharray="327" stroke-dashoffset="327"></circle>
+            </svg>
+            <div class="ring-center">
+              <div id="progressPercent" class="big">0%</div>
+              <div class="mini">of today’s goal</div>
+            </div>
+          </div>
+
+          <div class="stats">
+            <div><span id="statWorkouts" class="big">0</span><small>Workouts</small></div>
+            <div><span id="statCalories" class="big">0</span><small>Calories</small></div>
+            <div><span id="statPoints" class="big">0</span><small>Points</small></div>
+          </div>
+        </div>
+
+        <div class="card plan-card">
+          <h2>Today’s Plan</h2>
+          <ul id="todayPlan" class="plan-list"></ul>
+          <div class="actions">
+            <button class="btn" id="shufflePlan">Shuffle Plan</button>
+            <button class="btn outline" id="completePlan">Mark All Complete</button>
+          </div>
+          <div id="quote" class="quote">“The body achieves what the mind believes.”</div>
+        </div>
+      </div>
+
+      <div class="card badge-card">
+        <h2>Your Badges</h2>
+        <div id="badges" class="badges"></div>
+      </div>
+    </section>
+
+    <!-- WORKOUTS -->
+    <section id="workouts" class="page">
+      <div class="card">
+        <div class="row space-between">
+          <h2>Workout Library</h2>
+          <div class="search">
+            <input id="searchInput" type="text" placeholder="Search workouts… (e.g., pushup, cardio)" />
+          </div>
+        </div>
+        <div id="workoutGrid" class="workout-grid"></div>
+      </div>
+    </section>
+
+    <!-- PROGRESS -->
+    <section id="progress" class="page">
+      <div class="grid two">
+        <div class="card">
+          <h2>This Week</h2>
+          <canvas id="weekChart" height="240"></canvas>
+        </div>
+        <div class="card">
+          <h2>History</h2>
+          <ul id="historyList" class="history"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- BMI & PLANNER -->
+    <section id="planner" class="page">
+      <div class="grid two">
+        <div class="card">
+          <h2>Calculate BMI</h2>
+          <div class="form">
+            <label>Height (cm) <input type="number" id="height" min="90" max="230" placeholder="e.g., 168"></label>
+            <label>Weight (kg) <input type="number" id="weight" min="25" max="250" placeholder="e.g., 62"></label>
+            <button id="calcBMI" class="btn">Calculate</button>
+          </div>
+          <div id="bmiResult" class="result"></div>
+        </div>
+
+        <div class="card">
+          <h2>Set Goal</h2>
+          <div class="form">
+            <label>Goal
+              <select id="goal">
+                <option value="stay-fit">Stay Fit</option>
+                <option value="fat-loss">Lose Fat</option>
+                <option value="muscle-gain">Gain Muscle</option>
+              </select>
+            </label>
+            <label>Daily Minutes <input type="number" id="dailyMinutes" min="10" max="180" value="30"></label>
+            <button id="saveGoal" class="btn">Save Goal</button>
+          </div>
+          <div id="planSuggest" class="result"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="settings" class="page">
+      <div class="card">
+        <h2>Quick Links</h2>
+        <ul class="links">
+          <li>🎵 Workout Mix: <a target="_blank" href="https://www.youtube.com/results?search_query=workout+mix">Open on YouTube</a></li>
+          <li>🧘‍♀️ Cooldown Music: <a target="_blank" href="https://www.youtube.com/results?search_query=relaxing+cooldown+music">Open on YouTube</a></li>
+          <li>📋 Export Progress: <button class="btn tiny" id="exportData">Download JSON</button></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>About</h2>
+        <p>FitFlex is a frontend project built with HTML, CSS & JavaScript. No login needed. Data is stored locally in your browser.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- WORKOUT MODAL -->
+  <div id="workoutModal" class="modal hidden">
+    <div class="modal-content">
+      <button class="close" id="closeModal">✖</button>
+      <div class="modal-body">
+        <div class="media">
+          <img id="modalGif" alt="Workout demo" />
+        </div>
+        <div class="info">
+          <h3 id="modalTitle">Workout</h3>
+          <p id="modalDesc"></p>
+
+          <div class="timer">
+            <div id="countdown" class="time">00:30</div>
+            <div class="bar">
+              <div id="timeBar" class="bar-fill"></div>
+            </div>
+            <div class="timer-actions">
+              <button id="startTimer" class="btn">Start</button>
+              <button id="pauseTimer" class="btn outline">Pause</button>
+              <button id="completeWorkout" class="btn success">Complete ✔</button>
+            </div>
+          </div>
+
+          <div class="mini-note">Tip: Keep water nearby and maintain form. 💧</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">Made with ❤️ for fitness check</footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
