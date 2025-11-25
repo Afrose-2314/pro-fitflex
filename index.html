@@ -5,24 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>FitFlex — Your Personal Fitness Companion</title>
   <link rel="stylesheet" href="style.css" />
+
   <!-- Chart.js for animated charts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Icons -->
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <!-- LOGIN PAGE -->
-<div id="loginPage">
-    <h1>💪 FitFlex 2.0</h1>
-    <p>The Next Level Fitness Companion</p>
 
-    <div id="loginBox">
-        <input type="text" id="username" placeholder="Enter Name">
-        <input type="password" id="password" placeholder="Password: 12345678">
-        <button onclick="login()">Login</button>
-    </div>
+  <style>
+    /* Hide full app until login */
+    #mainApp { display: none; }
+  </style>
+</head>
+
+<body>
+
+<!-- ============================
+       LOGIN PAGE (VISIBLE FIRST)
+===============================-->
+<div id="loginPage">
+  <h1>💪 FitFlex 2.0</h1>
+  <p>The Next Level Fitness Companion</p>
+
+  <div id="loginBox">
+    <input type="text" id="username" placeholder="Enter Name">
+    <input type="password" id="password" placeholder="Password: 12345678">
+    <button onclick="login()">Login</button>
+  </div>
 </div>
+
+
+<!-- ============================
+        MAIN APP (HIDDEN INITIALLY)
+===============================-->
+<div id="mainApp">
 
   <header class="app-header">
     <div class="brand">
@@ -48,6 +65,7 @@
   </nav>
 
   <main class="container">
+
     <!-- DASHBOARD -->
     <section id="dashboard" class="page active">
       <div class="grid two">
@@ -116,7 +134,7 @@
       </div>
     </section>
 
-    <!-- BMI & PLANNER -->
+    <!-- BMI & Planner -->
     <section id="planner" class="page">
       <div class="grid two">
         <div class="card">
@@ -147,7 +165,7 @@
       </div>
     </section>
 
-    <!-- SETTINGS -->
+    <!-- Settings -->
     <section id="settings" class="page">
       <div class="card">
         <h2>Quick Links</h2>
@@ -157,11 +175,13 @@
           <li>📋 Export Progress: <button class="btn tiny" id="exportData">Download JSON</button></li>
         </ul>
       </div>
+
       <div class="card">
         <h2>About</h2>
         <p>FitFlex is a frontend project built with HTML, CSS & JavaScript. No login needed. Data is stored locally in your browser.</p>
       </div>
     </section>
+
   </main>
 
   <!-- WORKOUT MODAL -->
@@ -178,14 +198,14 @@
 
           <div class="timer">
             <div id="countdown" class="time">00:30</div>
-            <div class="bar">
-              <div id="timeBar" class="bar-fill"></div>
-            </div>
+            <div class="bar"><div id="timeBar" class="bar-fill"></div></div>
+
             <div class="timer-actions">
               <button id="startTimer" class="btn">Start</button>
               <button id="pauseTimer" class="btn outline">Pause</button>
               <button id="completeWorkout" class="btn success">Complete ✔</button>
             </div>
+
           </div>
 
           <div class="mini-note">Tip: Keep water nearby and maintain form. 💧</div>
@@ -195,7 +215,30 @@
   </div>
 
   <footer class="footer">Made with ❤️ for fitness check</footer>
+</div> <!-- END MAIN APP -->
 
-  <script src="app.js"></script>
+
+<script>
+  function login() {
+    const user = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value;
+
+    if (user === "") {
+      alert("Please enter your name");
+      return;
+    }
+
+    if (pass !== "12345678") {
+      alert("Incorrect password! Use 12345678");
+      return;
+    }
+
+    // Hide login, show app
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("mainApp").style.display = "block";
+  }
+</script>
+
+<script src="app.js"></script>
 </body>
 </html>
